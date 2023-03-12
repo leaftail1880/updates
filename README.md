@@ -9,5 +9,5 @@ Next, for Russian's only:
 Скачать/Обновить StelTimize:
 
 ```bash
-powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/update/main/StelTimize/Update.ps1')"
+powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/StelTimize/Update.ps1')"
 ```
