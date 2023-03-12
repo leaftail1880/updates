@@ -1,1 +1,0 @@
-Use may not use any assets or panels from this pack for other packs and or clients. That will just take away from Bedrocktimize. You also should not use mediafire links or personal adfly or other link shorteners provived by me (NetherNinja).
