@@ -1,4 +1,4 @@
-Write-Host "INSTALLER VERSION 0.0.5"
+Write-Host "INSTALLER VERSION 0.0.6"
 
 Add-Type -AssemblyName PresentationFramework
 
