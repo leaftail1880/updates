@@ -1,4 +1,4 @@
-Write-Host "SETUP VERSION 0.0.2"
+Write-Host "SETUP VERSION 0.0.3"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -89,8 +89,12 @@ catch {
 $WshShell = New-Object -ComObject WScript.Shell
 $shortcut = $WshShell.CreateShortcut("$DESKTOP\MCLauncher.lnk")
 
+$target = "$ROOT/MCLauncher/MCLaucher.exe"
+
 # Установить свойства ярлыка
-$shortcut.TargetPath = "$ROOT/MCLauncher/MCLaucher.exe"
+$shortcut.TargetPath = $target
+$shortcut.WorkingDirectory = (Split-Path $target)
+$shortcut.IconLocation = "$target,0"
 
 # Сохранить ярлык
 $shortcut.Save()
