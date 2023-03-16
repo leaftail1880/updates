@@ -1,63 +1,5 @@
 Add-Type -AssemblyName PresentationFramework
 
-$tempPath = "$env:USERPROFILE\AppData\Local\Temp\MCDownload"
-$removePathError = ""
-
-try {
-  try {
-    Remove-Item -Recurse -Path $tempPath
-  }
-  catch {
-    $removePathError = "$Error"
-  }
-  
-  try {
-    New-Item -ItemType Directory -Path $tempPath -Force
-  }
-  catch {
-    LogErrorAndExit "Create temp folder" $Error
-    Exit 1
-  }
-  
-  # Use the temp folder
-  Write-Output "Using temp folder $($tempPath)"
-
-  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/DLL.zip" "DLL.zip"
-
-  $stupidDLLname = "Windows.ApplicationModel.Store.dll"
-
-  try {
-    takeown /f "$env:SystemRoot/System32/$stupidDLLname" /a
-    Copy-Item -Path "$tempPath/DLL/System32/$stupidDLLname" -Destination "$env:SystemRoot/System32/$stupidDLLname"
-  }
-  catch {
-    LogErrorAndExit "Patching System32" $Error
-  }
-    
-  try {
-    takeown /f "$env:SystemRoot/SysWOW64/$stupidDLLname" /a
-    Copy-Item -Path "$tempPath/DLL/SysWOW64/$stupidDLLname" -Destination "$env:SystemRoot/SysWOW64/$stupidDLLname"
-  }
-  catch {
-    LogErrorAndExit "Patching SysWOW64" $Error
-  }
-
-  DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" $env:USERPROFILE
-
-  CreateInk "$env:USERPROFILE/MCLauncher/MClauncher.exe" "$env:USERPROFILE/Desktop" "Minecraft Bedrock Launcher.Ink"
-
-  # Delete the temp folder
-  Remove-Item $tempPath -Recurse
-
-  Read-Host -Prompt "Press Enter to exit"
-
-}
-catch {
-  LogErrorAndExit "Unhandled" $Error  
-}
-
-
-
 
 function LogErrorAndExit($ErrorType, $ErrorToLog) {
 
@@ -119,3 +61,62 @@ function CreateInk($target, $path, $name) {
   # Сохранить ярлык
   $shortcut.Save()
 }
+
+$tempPath = "$env:USERPROFILE\AppData\Local\Temp\MCDownload"
+$removePathError = ""
+
+try {
+  try {
+    Remove-Item -Recurse -Path $tempPath
+  }
+  catch {
+    $removePathError = "$Error"
+  }
+  
+  try {
+    New-Item -ItemType Directory -Path $tempPath -Force
+  }
+  catch {
+    LogErrorAndExit"Create temp folder" $Error
+    Exit 1
+  }
+  
+  # Use the temp folder
+  Write-Output "Using temp folder $($tempPath)"
+
+  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/DLL.zip" "DLL.zip"
+
+  $stupidDLLname = "Windows.ApplicationModel.Store.dll"
+
+  try {
+    takeown /f "$env:SystemRoot/System32/$stupidDLLname" /a
+    Copy-Item -Path "$tempPath/DLL/System32/$stupidDLLname" -Destination "$env:SystemRoot/System32/$stupidDLLname"
+  }
+  catch {
+    LogErrorAndExit "Patching System32" $Error
+  }
+    
+  try {
+    takeown /f "$env:SystemRoot/SysWOW64/$stupidDLLname" /a
+    Copy-Item -Path "$tempPath/DLL/SysWOW64/$stupidDLLname" -Destination "$env:SystemRoot/SysWOW64/$stupidDLLname"
+  }
+  catch {
+    LogErrorAndExit "Patching SysWOW64" $Error
+  }
+
+  DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" $env:USERPROFILE
+
+  CreateInk "$env:USERPROFILE/MCLauncher/MClauncher.exe" "$env:USERPROFILE/Desktop" "Minecraft Bedrock Launcher.Ink"
+
+  # Delete the temp folder
+  Remove-Item $tempPath -Recurse
+
+  Read-Host -Prompt "Press Enter to exit"
+
+}
+catch {
+  LogErrorAndExit "Unhandled" $Error  
+}
+
+
+
