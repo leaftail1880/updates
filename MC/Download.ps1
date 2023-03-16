@@ -1,7 +1,8 @@
-Add-Type -AssemblyName PresentationFramework
-$ROOT = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))/Minecraft Bedrock Install"
+Write-Host "INSTALLER VERSION 0.0.2"
 
-Write-Host "INSTALLER VERSION 1.0.21"
+Add-Type -AssemblyName PresentationFramework
+
+$ROOT = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))/Minecraft Bedrock Install"
 
 function DownloadArchieve($Uri, $FileName, $Folder = $ROOT) {
   $file = "$Folder\$FileName"
@@ -76,7 +77,7 @@ catch {
 
 # Setup.ps1
 try {
-  Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Setup.ps1" -OutFile $file -UseBasicParsing
+  Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Setup.ps1" -OutFile "$ROOT\Setup.ps1"
 }
 catch {
   Notify "Error while downloading Setup.ps1" $_
@@ -98,7 +99,6 @@ catch {
   Notify "Error while writing Next.txt" $_
 }
 
-Write-Host "Done. Check info boxes under another windows."
-# Show error box
+Write-Host "Done. Check message boxes under another windows."
 [System.Windows.MessageBox]::Show("Done! Check Desktop/Minecraft Bedrock Install/Next.txt for next steps.")
 Exit 0

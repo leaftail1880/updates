@@ -1,4 +1,7 @@
+Write-Host "SETUP VERSION 0.0.1"
+
 Add-Type -AssemblyName PresentationFramework
+
 $DESKTOP = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))"
 $ROOT = "$DESKTOP/Minecraft Bedrock Install"
 
