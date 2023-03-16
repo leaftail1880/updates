@@ -40,13 +40,17 @@ $Err
   Exit 1
 }
 
-# Folder
-try {
-  if (Test-Path -Path $ROOT -PathType Leaf -ErrorAction SilentlyContinue) {
-    Remove-Item $ROOT -ErrorAction Stop -Force -Recurse
+function CreateFolder($Path) {
+  if (Test-Path -Path $Path -PathType Leaf -ErrorAction SilentlyContinue) {
+    Remove-Item $Path -ErrorAction Stop -Force -Recurse
   }
   
-  New-item $ROOT -ItemType Directory
+  New-item $Path -ItemType Directory
+}
+
+# Folder
+try {
+  CreateFolder $ROOT
 }
 catch {
   Notify "Error while creating folder on desktop." $_
@@ -62,6 +66,7 @@ catch {
 
 # Launcher
 try {
+  CreateFolder "$ROOT\MCLauncher"
   DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" "$ROOT\MCLauncher"
 }
 catch {
