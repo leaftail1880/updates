@@ -1,5 +1,4 @@
 Add-Type -AssemblyName PresentationFramework
-
 $ROOT = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))/Minecraft Bedrock Install"
 
 
@@ -41,6 +40,7 @@ $Err
   Exit 1
 }
 
+# Folder
 try {
   if (Test-Path -Path $ROOT -PathType Leaf -ErrorAction SilentlyContinue) {
     Remove-Item $ROOT -ErrorAction Stop -Force -Recurse
@@ -52,7 +52,7 @@ catch {
   Notify "Error while creating folder on desktop." $_
 }
 
-
+# DLL
 try {
   DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/DLL.zip" "DLL.zip"
 }
@@ -60,11 +60,36 @@ catch {
   Notify "Error while downloading DLL's." $_
 }
 
+# Launcher
 try {
-  DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip"
+  DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" "$ROOT\MCLauncher"
 }
 catch {
   Notify "Error while downloading MCLauncher." $_
+}
+
+# Setup.ps1
+try {
+  Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Setup.ps1" -OutFile $file
+}
+catch {
+  Notify "Error while downloading Setup.ps1" $_
+}
+
+# Next.txt
+try {
+  $content = @"
+Откройте PowerShell от имени Администратора нажав ПКМ по иконке Windows в левом нижнем углу. 
+
+Введите следующую команду и нажмите Enter:
+
+. "$ROOT\Setup.ps1"
+"@
+
+  Set-Content -Path "$ROOT\Next.txt" -Value $content
+}
+catch {
+  Notify "Error while writing Next.txt." $_
 }
 
 Write-Host "Done. Check info boxes under another windows."
