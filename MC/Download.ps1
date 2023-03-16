@@ -2,6 +2,7 @@ Add-Type -AssemblyName PresentationFramework
 
 $ROOT = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))/Minecraft Bedrock Install"
 
+
 function DownloadArchieve($Uri, $FileName, $Folder = $ROOT) {
   $file = "$Folder\$FileName"
 
@@ -37,8 +38,20 @@ $Err
   Write-Host "Script failed. Check error boxes under another windows."
   # Show error box
   [System.Windows.MessageBox]::Show("$ErrorType Check Desktop/Minecraft Bedrock Install/Error.txt for detail.")
-  Exit
+  Exit 1
 }
+
+try {
+  if (Test-Path -Path $ROOT -PathType Leaf -ErrorAction SilentlyContinue) {
+    Remove-Item $ROOT -ErrorAction Stop -Force -Recurse
+  }
+  
+  New-item $ROOT -ItemType Directory
+}
+catch {
+  Notify "Error while creating folder on desktop." $_
+}
+
 
 try {
   DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/DLL.zip" "DLL.zip"
@@ -53,3 +66,8 @@ try {
 catch {
   Notify "Error while downloading MCLauncher." $_
 }
+
+Write-Host "Done. Check info boxes under another windows."
+# Show error box
+[System.Windows.MessageBox]::Show("Done! Check Desktop/Minecraft Bedrock Install/Next.txt for next steps.")
+Exit 0
