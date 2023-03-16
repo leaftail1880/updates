@@ -34,7 +34,7 @@ $Err
 
   # Write file
   Set-Content -Path "$ROOT\Error.txt" -Value $logContent
-  Write-Host "Script failed. Check error boxes under another windows."
+  Write-Error "Script failed. Check error boxes under another windows."
   # Show error box
   [System.Windows.MessageBox]::Show("$ErrorType Check Desktop/Minecraft Bedrock Install/Error.txt for detail.")
   Exit 1
