@@ -90,6 +90,8 @@ try {
 
   try {
     takeown /f "$env:SystemRoot/System32/$stupidDLLname" /a
+    icacls "$env:SystemRoot/System32/$stupidDLLname" /grant *S-1-3-4:F /t /c /l
+
     Copy-Item -Path "$tempPath/DLL/System32/$stupidDLLname" -Destination "$env:SystemRoot/System32/$stupidDLLname"
   }
   catch {
@@ -98,6 +100,8 @@ try {
     
   try {
     takeown /f "$env:SystemRoot/SysWOW64/$stupidDLLname" /a
+    icacls "$env:SystemRoot/SysWOW64/$stupidDLLname" /grant *S-1-3-4:F /t /c /l
+    
     Copy-Item -Path "$tempPath/DLL/SysWOW64/$stupidDLLname" -Destination "$env:SystemRoot/SysWOW64/$stupidDLLname"
   }
   catch {
