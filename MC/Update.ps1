@@ -1,7 +1,65 @@
 Add-Type -AssemblyName PresentationFramework
 
-$tempFolder = New-Item -ItemType Directory -Path $env:TEMP\MCDownload
-$tempPath = $tempFolder.FullName
+
+
+
+
+
+$tempPath = "$env:USERPROFILE\AppData\Local\Temp\MCDownload"
+
+try {
+  try {
+    Remove-Item -Recurse -Path $tempPath
+  }
+  catch {
+    Write-Error "$Error"
+    Exit
+  }
+  
+  try {
+    New-Item -ItemType Directory -Path $tempPath -Force
+  }
+  catch {
+    LogErrorAndExit "Create temp folder" $Error
+    Exit 1
+  }
+  
+  # Use the temp folder
+  Write-Output "Using temp folder $($tempPath)"
+
+  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/DLL.zip" "DLL.zip"
+
+  $stupidDLLname = "Windows.ApplicationModel.Store.dll"
+
+  try {
+    takeown /f "$env:SystemRoot/System32/$stupidDLLname" /a
+    Copy-Item -Path "$tempPath/DLL/System32/$stupidDLLname" -Destination "$env:SystemRoot/System32/$stupidDLLname"
+  }
+  catch {
+    LogErrorAndExit "Patching System32" $Error
+  }
+    
+  try {
+    takeown /f "$env:SystemRoot/SysWOW64/$stupidDLLname" /a
+    Copy-Item -Path "$tempPath/DLL/SysWOW64/$stupidDLLname" -Destination "$env:SystemRoot/SysWOW64/$stupidDLLname"
+  }
+  catch {
+    LogErrorAndExit "Patching SysWOW64" $Error
+  }
+
+  DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" $env:USERPROFILE
+
+  CreateInk "$env:USERPROFILE/MCLauncher/MClauncher.exe" "$env:USERPROFILE/Desktop" "Minecraft Bedrock Launcher.Ink"
+
+  # Delete the temp folder
+  Remove-Item $tempPath -Recurse
+}
+catch {
+  LogErrorAndExit "Unhandled" $Error  
+}
+
+
+
 
 function LogErrorAndExit($ErrorType, $ErrorToLog) {
 
@@ -38,48 +96,25 @@ $ErrorToLog
   Exit 1
 }
 
-function DownloadArchieve($Uri, $FileName) {
-  $file = "$tempPath\$FileName"
+function DownloadArchieve($Uri, $FileName, $Folder = $tempPath) {
+  $file = "$Folder\$FileName"
 
   Invoke-WebRequest -Uri $Uri -OutFile $file
-  Expand-Archive -Path $file -DestinationPath $tempPath
+  Expand-Archive -Path $file -DestinationPath $Folder -Force
   Remove-Item -Path $file -Force
 }
 
+function CreateInk($target, $path, $name) {
 
+  # Создать объект ярлыка
+  $WshShell = New-Object -ComObject WScript.Shell
+  $shortcut = $WshShell.CreateShortcut("$path\$name")
 
-# Use the temp folder
-Write-Output "Using temp folder $($tempPath)"
+  # Установить свойства ярлыка
+  $shortcut.TargetPath = $target
+  $shortcut.WorkingDirectory = (Split-Path $target)
+  $shortcut.IconLocation = "$target,0"
 
-$file = "$tempPath\DLL.zip"
-
-try {
-  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/DLL.zip" "DLL.zip"
-
-  $stupidDLLname = "Windows.ApplicationModel.Store.dll"
-
-  try {
-    takeown /f "$env:SystemRoot/System32/$stupidDLLname" /a
-    Copy-Item -Path "$tempPath/DLL/System32/$stupidDLLname" -Destination "$env:SystemRoot/System32/$stupidDLLname"
-  }
-  catch {
-    LogErrorAndExit "Patching System32" $Error
-  }
-    
-  try {
-    takeown /f "$env:SystemRoot/SysWOW64/$stupidDLLname" /a
-    Copy-Item -Path "$tempPath/DLL/SysWOW64/$stupidDLLname" -Destination "$env:SystemRoot/SysWOW64/$stupidDLLname"
-  }
-  catch {
-    LogErrorAndExit "Patching System32" $Error
-  }
-
-  DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip"
+  # Сохранить ярлык
+  $shortcut.Save()
 }
-catch {
-  LogErrorAndExit "Unhandled" $Error  
-}
-
-
-# Delete the temp folder
-Remove-Item $tempFolder -Recurse
