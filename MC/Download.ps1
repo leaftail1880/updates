@@ -1,6 +1,7 @@
 Add-Type -AssemblyName PresentationFramework
 $ROOT = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))/Minecraft Bedrock Install"
 
+Write-Host "INSTALLER VERSION 1.0.21"
 
 function DownloadArchieve($Uri, $FileName, $Folder = $ROOT) {
   $file = "$Folder\$FileName"
@@ -36,7 +37,7 @@ $Err
   Set-Content -Path "$ROOT\Error.txt" -Value $logContent
   Write-Error "$Info. Check error boxes under another windows."
   # Show error box
-  [System.Windows.MessageBox]::Show("$ErrorType Check Desktop/Minecraft Bedrock Install/Error.txt for detail.")
+  [System.Windows.MessageBox]::Show("$Info. Check Desktop/Minecraft Bedrock Install/Error.txt for detail.")
   Exit 1
 }
 
@@ -44,7 +45,7 @@ function CreateFolder($Path) {
   if (Test-Path -Path $Path -PathType Leaf -ErrorAction SilentlyContinue) {
     Remove-Item $Path -ErrorAction Stop -Force -Recurse
   }
-  
+  Start-Sleep 1
   New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue
 }
 
