@@ -63,16 +63,6 @@ function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
   }
 }
 
-function CreateFolder($Path) {
-  if (Test-Path -Path $Path -PathType Leaf -ErrorAction SilentlyContinue) {
-    Remove-Item $Path -ErrorAction Stop -Force -Recurse
-  }
-  Start-Sleep 1
-  New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue
-}
-
-
-
 
 try {
 
@@ -98,10 +88,13 @@ catch {
 try {
   $LauncherFolder = "$env:ProgramFiles/MCLauncher"
 
+  if (Test-Path -Path $LauncherFolder -PathType Leaf -ErrorAction SilentlyContinue) {
+    Remove-Item $LauncherFolder -ErrorAction Stop -Force -Recurse
+  }
   
-  CreateFolder $LauncherFolder
+  Rename-Item "$ROOT/MCLauncher" -NewName $LauncherFolder -Force
   
-  Move-Item "$ROOT/Data/icon.png" -Destination $LauncherFolder
+  Move-Item "$ROOT/Data/icon.ico" -Destination $LauncherFolder
   $ShortcutPath = "$LauncherFolder/Minecraft Bedrock Launcher.lnk"
   
   # Создать объект ярлыка
@@ -113,7 +106,7 @@ try {
   # Установить свойства ярлыка
   $Shortcut.TargetPath = $target
   $Shortcut.WorkingDirectory = (Split-Path $target)
-  $Shortcut.IconLocation = "$LauncherFolder/icon.png,0"
+  $Shortcut.IconLocation = "$LauncherFolder/icon.ico,0"
 
   # Сохранить ярлык
   $Shortcut.Save()
