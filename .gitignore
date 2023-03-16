@@ -1,0 +1,11 @@
+# Ignore everything
+/*
+
+# Folder whitelist
+!StelTimize/
+!MC/
+
+# Root files whitelist
+!package.json
+!README.md
+!.gitignore
