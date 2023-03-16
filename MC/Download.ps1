@@ -1,4 +1,4 @@
-Write-Host "INSTALLER VERSION 0.0.2"
+Write-Host "INSTALLER VERSION 0.0.5"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -60,7 +60,7 @@ catch {
 
 # DLL
 try {
-  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/DLL.zip" "DLL.zip"
+  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.zip" "Data.zip"
 }
 catch {
   Notify "Error while downloading DLL's." $_
