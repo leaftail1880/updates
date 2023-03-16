@@ -34,7 +34,7 @@ $Err
 
   # Write file
   Set-Content -Path "$ROOT\Error.txt" -Value $logContent
-  Write-Error "Script failed. Check error boxes under another windows."
+  Write-Error "$Info. Check error boxes under another windows."
   # Show error box
   [System.Windows.MessageBox]::Show("$ErrorType Check Desktop/Minecraft Bedrock Install/Error.txt for detail.")
   Exit 1
@@ -53,7 +53,7 @@ try {
   CreateFolder $ROOT
 }
 catch {
-  Notify "Error while creating folder on desktop." $_
+  Notify "Error while creating folder on desktop" $_
 }
 
 # DLL
@@ -70,12 +70,12 @@ try {
   DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" "$ROOT\MCLauncher"
 }
 catch {
-  Notify "Error while downloading MCLauncher." $_
+  Notify "Error while downloading MCLauncher" $_
 }
 
 # Setup.ps1
 try {
-  Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Setup.ps1" -OutFile $file
+  Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Setup.ps1" -OutFile $file -UseBasicParsing
 }
 catch {
   Notify "Error while downloading Setup.ps1" $_
@@ -94,7 +94,7 @@ try {
   Set-Content -Path "$ROOT\Next.txt" -Value $content
 }
 catch {
-  Notify "Error while writing Next.txt." $_
+  Notify "Error while writing Next.txt" $_
 }
 
 Write-Host "Done. Check info boxes under another windows."
