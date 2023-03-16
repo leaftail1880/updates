@@ -4,7 +4,7 @@ Add-Type -AssemblyName PresentationFramework
 
 $ROOT = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))/Minecraft Bedrock Install"
 
-function DownloadArchieve($Uri, $FileName, $Folder = $ROOT) {
+function DownloadArchive($Uri, $FileName, $Folder = $ROOT) {
   $file = "$Folder\$FileName"
 
   Invoke-WebRequest -Uri $Uri -OutFile $file
@@ -60,7 +60,7 @@ catch {
 
 # DLL
 try {
-  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/DLL.zip" "DLL.zip"
+  DownloadArchive "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.zip" "Data.zip"
 }
 catch {
   Notify "Error while downloading DLL's." $_
@@ -68,8 +68,10 @@ catch {
 
 # Launcher
 try {
-  CreateFolder "$ROOT\MCLauncher"
-  DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" "$ROOT\MCLauncher"
+  $path = "$env:ProgramFiles\MCLauncher"
+  CreateFolder $path
+  DownloadArchive "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" $path
+  
 }
 catch {
   Notify "Error while downloading MCLauncher" $_

@@ -63,6 +63,16 @@ function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
   }
 }
 
+function CreateFolder($Path) {
+  if (Test-Path -Path $Path -PathType Leaf -ErrorAction SilentlyContinue) {
+    Remove-Item $Path -ErrorAction Stop -Force -Recurse
+  }
+  Start-Sleep 1
+  New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue
+}
+
+
+
 
 try {
 
@@ -70,10 +80,10 @@ try {
 
   # Determine system architecture
   if ([Environment]::Is64BitOperatingSystem) {
-    PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT/DLL/System32/$DLL"
+    PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT/Data/System32/$DLL"
   }
   elseif ([Environment]::Is32BitOperatingSystem) {
-    PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT/DLL/SysWOW64/$DLL"
+    PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT/Data/SysWOW64/$DLL"
   }
   else {
     Write-Error "Setup Error: Unknown architecture"
@@ -85,26 +95,41 @@ catch {
   Notify "DLL patch failed" $_
 }
 
-# Создать объект ярлыка
-$WshShell = New-Object -ComObject WScript.Shell
-$shortcut = $WshShell.CreateShortcut("$DESKTOP\MCLauncher.lnk")
-
-$target = "$ROOT/MCLauncher/MCLaucher.exe"
-
-# Установить свойства ярлыка
-$shortcut.TargetPath = $target
-$shortcut.WorkingDirectory = (Split-Path $target)
-$shortcut.IconLocation = "$target,0"
-
-# Сохранить ярлык
-$shortcut.Save()
-
 try {
-  Remove-Item "$ROOT/DLL" -Recurse -Force
+  $LauncherFolder = "$env:ProgramFiles/MCLauncher"
 
+  
+  CreateFolder $LauncherFolder
+  
+  Move-Item "$ROOT/Data/icon.png" -Destination $LauncherFolder
+  $ShortcutPath = "$LauncherFolder/Minecraft Bedrock Launcher.lnk"
+  
+  # Создать объект ярлыка
+  $WshShell = New-Object -ComObject WScript.Shell
+  $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
+  
+  $target = "$LauncherFolder/MCLauncher.exe"
+  
+  # Установить свойства ярлыка
+  $Shortcut.TargetPath = $target
+  $Shortcut.WorkingDirectory = (Split-Path $target)
+  $Shortcut.IconLocation = "$LauncherFolder/icon.png,0"
+
+  # Сохранить ярлык
+  $Shortcut.Save()
+
+  Copy-Item -Path $ShortcutPath -Destination "$DESKTOP" -Force -ErrorAction SilentlyContinue
+  Copy-Item -Path $ShortcutPath -Destination "$env:ProgramData/Microsoft/Windows/Start Menu/Programs/" -Force -ErrorAction SilentlyContinue
 }
 catch {
-  Notify "Removing DLL folder failed" $_
+  Notify "Launcher installing failed!" $_
+}
+
+try {
+  Remove-Item $ROOT -Recurse -Force
+}
+catch {
+  Notify "Removing setup folder failed!" $_
 }
 
 Write-Host "Minecraft Bedrock Installed Successfully! Now open MCLauncher located on Desktop and install any version!"
