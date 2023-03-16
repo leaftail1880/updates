@@ -48,6 +48,9 @@ try {
 
   # Delete the temp folder
   Remove-Item $tempPath -Recurse
+
+  Read-Host -Prompt "Press Enter to exit"
+
 }
 catch {
   LogErrorAndExit "Unhandled" $Error  
