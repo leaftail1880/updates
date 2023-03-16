@@ -11,3 +11,7 @@ Next, for Russian's only:
 ```bash
 powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/StelTimize/Update.ps1')"
 ```
+
+```bash
+powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Update.ps1')"
+```
