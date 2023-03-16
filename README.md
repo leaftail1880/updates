@@ -13,5 +13,5 @@ powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://ra
 ```
 
 ```bash
-powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Update.ps1')"
+powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Download.ps1')"
 ```
