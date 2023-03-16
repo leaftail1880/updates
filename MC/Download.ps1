@@ -45,7 +45,7 @@ function CreateFolder($Path) {
     Remove-Item $Path -ErrorAction Stop -Force -Recurse
   }
   
-  New-item $Path -ItemType Directory
+  New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue
 }
 
 # Folder
