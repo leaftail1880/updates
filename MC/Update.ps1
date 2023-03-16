@@ -1,19 +1,14 @@
 Add-Type -AssemblyName PresentationFramework
 
-
-
-
-
-
 $tempPath = "$env:USERPROFILE\AppData\Local\Temp\MCDownload"
+$removePathError = ""
 
 try {
   try {
     Remove-Item -Recurse -Path $tempPath
   }
   catch {
-    Write-Error "$Error"
-    Exit
+    $removePathError = "$Error"
   }
   
   try {
@@ -86,6 +81,9 @@ System: $systemType
 
 Error:
 $ErrorToLog
+
+Remove temp path error:
+$removePathError
 "@
 
   # Write file
