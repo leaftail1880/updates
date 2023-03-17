@@ -1,4 +1,4 @@
-Write-Host "SETUP VERSION 0.0.7"
+Write-Host "SETUP VERSION 0.0.8"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -10,6 +10,9 @@ if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
   [System.Windows.MessageBox]::Show("Run PowerShell as administrator!")
   Exit
 }
+
+Remove-Item "$ROOT/Error.txt" -Force -ErrorAction SilentlyContinue
+Remove-Item "$ROOT/SError.txt" -Force -ErrorAction SilentlyContinue
 
 function Notify($Info, $Err) {
   # Determine system architecture
@@ -47,6 +50,7 @@ function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
 
   try {
     Stop-Process -Name WinStore.App
+    Start-Sleep 2
   } 
   catch {
     Write-Error $_
@@ -88,7 +92,7 @@ catch {
 try {
   $LauncherFolder = "$env:ProgramFiles/MCLauncher"
 
-  if (Test-Path -Path $LauncherFolder -PathType Leaf -ErrorAction SilentlyContinue) {
+  if (Test-Path -Path $LauncherFolder -PathType Container -ErrorAction SilentlyContinue) {
     Remove-Item $LauncherFolder -ErrorAction Stop -Force -Recurse
   }
   

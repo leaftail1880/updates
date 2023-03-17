@@ -1,4 +1,4 @@
-Write-Host "INSTALLER VERSION 0.0.7"
+Write-Host "INSTALLER VERSION 0.0.8"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -43,7 +43,7 @@ $Err
 }
 
 function CreateFolder($Path) {
-  if (Test-Path -Path $Path -PathType Leaf -ErrorAction SilentlyContinue) {
+  if (Test-Path -Path $Path -PathType Container -ErrorAction SilentlyContinue) {
     Remove-Item $Path -ErrorAction Stop -Force -Recurse
   }
   Start-Sleep 1
