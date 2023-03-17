@@ -1,4 +1,4 @@
-Write-Host "INSTALLER VERSION 0.0.18"
+﻿Write-Host "INSTALLER VERSION 0.0.18"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -47,8 +47,9 @@ function CreateFolder($Path) {
     Remove-Item $Path -ErrorAction Stop -Force -Recurse
   }
   Start-Sleep 1
+  Write-Host " "
   New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue -InformationAction SilentlyContinue
-  Write-Host "Created folder at path ""$Path"""
+  Write-Host " "
 }
 
 # Folder
@@ -98,7 +99,7 @@ try {
 
 
   $content2 = @"
-powershell.exe -ExecutionPolicy Bypass -File "$ROOT\Script.ps1"
+powershell.exe -ExecutionPolicy Bypass -File "$ROOT\Script.ps1" -Encoding utf8bom
 "@
   Set-Content -Path "$ROOT\SETUP.bat" -Value $content2
 }

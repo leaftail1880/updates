@@ -1,4 +1,4 @@
-Write-Host "SETUP VERSION 0.0.18"
+﻿Write-Host "SETUP VERSION 0.0.18"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -60,17 +60,17 @@ function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
   }
 }
 
-
 try {
   Write-Host "Patching DLL's..."
 
   $DLL = "Windows.ApplicationModel.Store.dll"
 
-  if (Get-Process -Name WinStore.App -ErrorAction SilentlyContinue) {
+  $PROCESS = Get-Process -Name WinStore.App -ErrorAction SilentlyContinue
+  if ($PROCESS) {
     try {
       Write-Host "Stopping WinStore.App process..."
-      Stop-Process -Name WinStore.App
-      Start-Sleep 2
+      $PROCESS.Kill()
+      Start-Sleep 4
     } 
     catch {
       Notify "Unable to stop process WinStore.App" $_
