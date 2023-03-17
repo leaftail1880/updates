@@ -1,8 +1,8 @@
-Write-Host "INSTALLER VERSION 0.0.13"
+Write-Host "INSTALLER VERSION 0.0.15"
 
 Add-Type -AssemblyName PresentationFramework
 
-$ROOT = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))/Minecraft Bedrock Install"
+$ROOT = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))\Minecraft Bedrock Install"
 
 function DownloadArchieve($Uri, $FileName, $Folder = $ROOT) {
   $file = "$Folder\$FileName"
@@ -38,7 +38,7 @@ $Err
   Set-Content -Path "$ROOT\Error.txt" -Value $logContent
   Write-Error "$Info. Check error boxes under another windows."
   # Show error box
-  [System.Windows.MessageBox]::Show("$Info. Check Desktop/Minecraft Bedrock Install/Error.txt for detail.")
+  [System.Windows.MessageBox]::Show("$Info. Check Desktop\Minecraft Bedrock Install\Error.txt for detail.")
   Exit 1
 }
 
@@ -86,19 +86,21 @@ catch {
 # Next.txt
 try {
   $content = @"
-Откройте PowerShell от имени Администратора нажав ПКМ по иконке Windows в левом нижнем углу. 
-
-Введите следующую команду и нажмите Enter:
-
-. "$ROOT\Setup.ps1"
+Нажмите по файлу SETUP.bat лкм и выберите "Запуск от имени администратора"
 "@
 
-  Set-Content -Path "$ROOT\Next.txt" -Value $content
+  Set-Content -Path "$ROOT\Следующий шаг.txt" -Value $content
+
+  $content2 = @"
+powershell.exe -ExecutionPolicy Bypass -File "$ROOT\Setup.ps1"
+"@
+
+  Set-Content -Path "$ROOT\SETUP.bat" -Value $content2
 }
 catch {
   Notify "Error while writing Next.txt" $_
 }
 
 Write-Host "Done. Check message boxes under another windows."
-[System.Windows.MessageBox]::Show("Done! Check Desktop/Minecraft Bedrock Install/Next.txt for next steps.")
+[System.Windows.MessageBox]::Show("Готово! Теперь нажмите лкм по файлу ""Рабочий стол/Minecraft Bedrock Install/SETUP.bat"" и выберите ""Запуск от имени администратора""")
 Exit 0
