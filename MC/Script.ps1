@@ -1,4 +1,4 @@
-Write-Host "SETUP VERSION 0.0.17"
+Write-Host "SETUP VERSION 0.0.18"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -122,8 +122,6 @@ catch {
 }
 
 try {
-  Write-Host "Closing processes associated ROOT folder..."
-  Get-Process | Where-Object { $_.ProcessName -eq "notepad" -and $_.Modules.FileName -match $ROOT } | Stop-Process -Force
   Start-Sleep 3
   Write-Host "Removing folder..."
   Remove-Item $ROOT -Recurse -Force
