@@ -1,4 +1,4 @@
-Write-Host "INSTALLER VERSION 0.0.15"
+Write-Host "INSTALLER VERSION 0.0.16"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -47,7 +47,8 @@ function CreateFolder($Path) {
     Remove-Item $Path -ErrorAction Stop -Force -Recurse
   }
   Start-Sleep 1
-  New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue
+  New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue -InformationAction SilentlyContinue
+  Write-Host "Created folder at path ""$Path"""
 }
 
 # Folder
@@ -60,6 +61,7 @@ catch {
 
 # DLL
 try {
+  Write-Host "Downloading data..."
   DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.zip" "Data.zip"
 }
 catch {
@@ -77,7 +79,8 @@ catch {
 
 # Setup.ps1
 try {
-  Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Setup.ps1" -OutFile "$ROOT\Setup.ps1"
+  Write-Host "Downloading next step script..."
+  Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Script.ps1" -OutFile "$ROOT\Script.ps1"
 }
 catch {
   Notify "Error while downloading Setup.ps1" $_
@@ -85,16 +88,18 @@ catch {
 
 # Next.txt
 try {
+  Write-Host "Writing help text..."
+
   $content = @"
 Нажмите по файлу SETUP.bat лкм и выберите "Запуск от имени администратора"
 "@
-
   Set-Content -Path "$ROOT\Следующий шаг.txt" -Value $content
 
-  $content2 = @"
-powershell.exe -ExecutionPolicy Bypass -File "$ROOT\Setup.ps1"
-"@
 
+
+  $content2 = @"
+powershell.exe -ExecutionPolicy Bypass -File "$ROOT\Script.ps1"
+"@
   Set-Content -Path "$ROOT\SETUP.bat" -Value $content2
 }
 catch {

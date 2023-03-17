@@ -1,4 +1,4 @@
-Write-Host "SETUP VERSION 0.0.15"
+Write-Host "SETUP VERSION 0.0.16"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -62,6 +62,7 @@ function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
 
 
 try {
+  Write-Host "Patching DLL's..."
 
   $DLL = "Windows.ApplicationModel.Store.dll"
 
@@ -76,7 +77,6 @@ try {
     }
   }
 
-  Write-Host "Patching DLL's..."
   PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT\Data\System32\$DLL"
   PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT\Data\SysWOW64\$DLL"
 }
@@ -92,12 +92,14 @@ try {
     Remove-Item $LauncherFolder -ErrorAction Stop -Force -Recurse
   }
   
+  Write-Host "Moving files to $env:ProgramFiles\MCLauncher..."
   Move-Item "$ROOT\MCLauncher" $LauncherFolder -Force
   Move-Item "$ROOT\Data\icon.ico" $LauncherFolder -Force
 
   $ShortcutPath = "$LauncherFolder\Minecraft Bedrock Launcher.lnk"
   
   # Создать объект ярлыка
+  Write-Host "Creating Shortcut..."
   $WshShell = New-Object -ComObject WScript.Shell
   $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
   
@@ -111,6 +113,7 @@ try {
   # Сохранить ярлык
   $Shortcut.Save()
 
+  Write-Host "Copying shortcuts..."
   Copy-Item -Path $ShortcutPath -Destination "$DESKTOP" -Force -ErrorAction SilentlyContinue
   Copy-Item -Path $ShortcutPath -Destination "$env:ProgramData\Microsoft\Windows\Start Menu\Programs" -Force -ErrorAction SilentlyContinue
 }
@@ -119,8 +122,10 @@ catch {
 }
 
 try {
+  Write-Host "Closing processes associated ROOT folder..."
   Get-Process | Where-Object { $_.ProcessName -eq "notepad" -and $_.Modules.FileName -match $ROOT } | Stop-Process -Force
   Start-Sleep 3
+  Write-Host "Removing folder..."
   Remove-Item $ROOT -Recurse -Force
 }
 catch {
