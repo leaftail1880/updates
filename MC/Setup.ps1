@@ -1,4 +1,4 @@
-Write-Host "SETUP VERSION 0.0.12"
+Write-Host "SETUP VERSION 0.0.13"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -46,9 +46,10 @@ $Err
 
 
 function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
-  $DLLtoPatch = "$DLLtoPatchFolder/$DLLtoPatchName"
+  $DLLtoPatch = "$DLLtoPatchFolder\$DLLtoPatchName"
 
   try {
+    Write-Host "Patching DLL at $DLLtoPatch"
     takeown /f "$DLLtoPatch"
     icacls "$DLLtoPatch" /grant *S-1-3-4:F /c
 
@@ -76,10 +77,8 @@ try {
   }
 
   Write-Host "Patching DLL's..."
-  Write-Host "System32"
-  PatchDLL "$env:SystemRoot/System32" $DLL "$ROOT/Data/System32/$DLL"
-  Write-Host "SysWOW64"
-  PatchDLL "$env:SystemRoot/SysWOW64" $DLL "$ROOT/Data/SysWOW64/$DLL"
+  PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT/Data/System32/$DLL"
+  PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT/Data/SysWOW64/$DLL"
 }
 catch {
   Notify "DLL patch failed" $_
