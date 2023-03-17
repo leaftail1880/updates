@@ -1,4 +1,4 @@
-﻿Write-Host "INSTALLER VERSION 0.0.20"
+﻿Write-Host "INSTALLER VERSION 0.0.21"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -47,7 +47,6 @@ function CreateFolder($Path) {
     Remove-Item $Path -ErrorAction Stop -Force -Recurse
   }
   Start-Sleep 1
-  Write-Host " "
   Write-Host "Создаю папку в ""$Path""..."
   $null = New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue -InformationAction SilentlyContinue
   Write-Host " "
@@ -64,6 +63,7 @@ catch {
 # DLL
 try {
   Write-Host "Скачиваю дату..."
+  Write-Host " "
   DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.zip" "Data.zip"
 }
 catch {
@@ -73,6 +73,7 @@ catch {
 # Launcher
 try {
   Write-Host "Скачиваю лаунчер..."
+  Write-Host " "
   CreateFolder "$ROOT\MCLauncher"
   DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" "$ROOT\MCLauncher"
 }
@@ -83,6 +84,7 @@ catch {
 # Script.ps1
 try {
   Write-Host "Скачиваю скрипт для следующего шага..."
+  Write-Host " "
   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Script.ps1" -OutFile "$ROOT\Script.ps1"
 }
 catch {
@@ -92,6 +94,7 @@ catch {
 # Следующий шаг.txt
 try {
   Write-Host "Пишу текст справки..."
+  Write-Host " "
 
   $content = @"
 Нажмите по файлу SETUP.bat лкм и выберите "Запуск от имени администратора"

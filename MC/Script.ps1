@@ -1,4 +1,4 @@
-﻿Write-Host "SETUP VERSION 0.0.20"
+﻿Write-Host "SETUP VERSION 0.0.21"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -49,9 +49,12 @@ function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
   $DLLtoPatch = "$DLLtoPatchFolder\$DLLtoPatchName"
 
   try {
+    Write-Host " "
     Write-Host "DLL: $DLLtoPatch"
+    Write-Host " "
     takeown /f "$DLLtoPatch"
     icacls "$DLLtoPatch" /grant *S-1-3-4:F /c
+    Write-Host " "
 
     Copy-Item -Path $newDLL -Destination $DLLtoPatchFolder -Force -ErrorAction Stop
   }
