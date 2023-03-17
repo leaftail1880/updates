@@ -1,4 +1,4 @@
-Write-Host "SETUP VERSION 0.0.6"
+Write-Host "SETUP VERSION 0.0.7"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -92,9 +92,9 @@ try {
     Remove-Item $LauncherFolder -ErrorAction Stop -Force -Recurse
   }
   
-  Rename-Item "$ROOT/MCLauncher" -NewName $LauncherFolder -Force
-  
-  Move-Item "$ROOT/Data/icon.ico" -Destination $LauncherFolder
+  Move-Item "$ROOT/MCLauncher" $LauncherFolder -Force
+  Move-Item "$ROOT/Data/icon.ico" $LauncherFolder -Force
+
   $ShortcutPath = "$LauncherFolder/Minecraft Bedrock Launcher.lnk"
   
   # Создать объект ярлыка
