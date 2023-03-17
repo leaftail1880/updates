@@ -1,4 +1,4 @@
-Write-Host "SETUP VERSION 0.0.11"
+Write-Host "SETUP VERSION 0.0.12"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -64,13 +64,15 @@ try {
 
   $DLL = "Windows.ApplicationModel.Store.dll"
 
-  try {
-    Write-Host "Stopping WinStore.App process..."
-    Stop-Process -Name WinStore.App
-    Start-Sleep 2
-  } 
-  catch {
-    Write-Error $_
+  if (Get-Process -Name WinStore.App -ErrorAction SilentlyContinue) {
+    try {
+      Write-Host "Stopping WinStore.App process..."
+      Stop-Process -Name WinStore.App
+      Start-Sleep 2
+    } 
+    catch {
+      Notify "Unable to stop process WinStore.App" $_
+    }
   }
 
   Write-Host "Patching DLL's..."
