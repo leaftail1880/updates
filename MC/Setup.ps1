@@ -1,4 +1,4 @@
-Write-Host "SETUP VERSION 0.0.8"
+Write-Host "SETUP VERSION 0.0.10"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -48,13 +48,7 @@ $Err
 function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
   $DLLtoPatch = "$DLLtoPatchFolder/$DLLtoPatchName"
 
-  try {
-    Stop-Process -Name WinStore.App
-    Start-Sleep 2
-  } 
-  catch {
-    Write-Error $_
-  }
+  
 
   takeown /f "$DLLtoPatch"
   icacls "$DLLtoPatch" /grant *S-1-3-4:F /c
@@ -72,24 +66,27 @@ try {
 
   $DLL = "Windows.ApplicationModel.Store.dll"
 
-  # Determine system architecture
-  if ([Environment]::Is64BitOperatingSystem) {
-    PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT/Data/System32/$DLL"
+  try {
+    Write-Host "Stopping WinStore.App process..."
+    Stop-Process -Name WinStore.App
+    Start-Sleep 2
+  } 
+  catch {
+    Write-Error $_
   }
-  elseif ([Environment]::Is32BitOperatingSystem) {
-    PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT/Data/SysWOW64/$DLL"
-  }
-  else {
-    Write-Error "Setup Error: Unknown architecture"
-    [System.Windows.MessageBox]::Show("Setup Error: Unknown architecture")
-    Exit
-  }
+
+  Write-Host "Patching DLL's..."
+  Write-Host "System32"
+  PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT/Data/System32/$DLL"
+  Write-Host "SysWOW64"
+  PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT/Data/SysWOW64/$DLL"
 }
 catch {
   Notify "DLL patch failed" $_
 }
 
 try {
+  Write-Host "Installing Launcher..."
   $LauncherFolder = "$env:ProgramFiles/MCLauncher"
 
   if (Test-Path -Path $LauncherFolder -PathType Container -ErrorAction SilentlyContinue) {
@@ -123,6 +120,7 @@ catch {
 }
 
 try {
+  Start-Sleep 3
   Remove-Item $ROOT -Recurse -Force
 }
 catch {
