@@ -2,14 +2,16 @@
 
 Add-Type -AssemblyName PresentationFramework
 
-$DESKTOP = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))"
-$ROOT = "$DESKTOP\Minecraft Bedrock Install"
+$IS_ADMIN = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-  Write-Error "Run PowerShell as administrator!"
-  [System.Windows.MessageBox]::Show("Run PowerShell as administrator!")
+if (-NOT $IS_ADMIN) {
+  Write-Error "Запусти файл SETUP.bat от имени Администратора!"
+  [System.Windows.MessageBox]::Show("Запусти файл SETUP.bat от имени Администратора!")
   Exit
 }
+
+$DESKTOP = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))"
+$ROOT = "$DESKTOP\Minecraft Bedrock Install"
 
 Remove-Item "$ROOT\Error.txt" -Force -ErrorAction SilentlyContinue
 Remove-Item "$ROOT\SetupError.txt" -Force -ErrorAction SilentlyContinue
@@ -38,8 +40,8 @@ $Err
 
   # Write file
   Set-Content -Path "$ROOT\SetupError.txt" -Value $logContent
+  # Show error
   Write-Error "$Info. Check error boxes under another windows."
-  # Show error box
   [System.Windows.MessageBox]::Show("$Info. Check Desktop\Minecraft Bedrock Install\SetupError.txt for detail.")
   Exit 1
 }
@@ -139,13 +141,20 @@ try {
   Start-Sleep 3
   Write-Host "Убираю установочные файлы..."
   Write-Host " "
-  Remove-Item $ROOT -Recurse -Force
+  try {
+    Remove-Item $ROOT -Recurse -Force
+  }
+  catch {
+    $Info = "Не удалось удалить установочную папку. Зайкройте блокнот с гайдом оттуда если он открыт и удалите ее вручную. (Это не влияет на установку Minecraft)"
+    Write-Host $Info
+    [System.Windows.MessageBox]::Show($Info)
+  }
 }
 catch {
   Notify "Removing setup folder failed!" $_
 }
 
-$message = "Minecraft Bedrock установлен! Теперь установите сам Minecraft используя ярлык лаунчера на рабочем столе или в стартовом меню."
+$message = "Готово! Теперь установите сам Minecraft используя ярлык лаунчера на рабочем столе или в стартовом меню."
 
 Write-Host $message
 [System.Windows.MessageBox]::Show($message)
