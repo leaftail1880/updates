@@ -1,4 +1,4 @@
-Write-Host "INSTALLER VERSION 0.0.16"
+Write-Host "INSTALLER VERSION 0.0.17"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -107,5 +107,8 @@ catch {
 }
 
 Write-Host "Done. Check message boxes under another windows."
-[System.Windows.MessageBox]::Show("Готово! Теперь нажмите лкм по файлу ""Рабочий стол/Minecraft Bedrock Install/SETUP.bat"" и выберите ""Запуск от имени администратора""")
+$message = @"
+Готово! Теперь нажмите пкм по файлу "Рабочий стол/Minecraft Bedrock Install/SETUP.bat" и выберите "Запуск от имени администратора"
+"@
+[System.Windows.MessageBox]::Show($message)
 Exit 0
