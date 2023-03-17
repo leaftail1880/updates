@@ -1,4 +1,4 @@
-﻿Write-Host "INSTALLER VERSION 0.0.18"
+﻿Write-Host "INSTALLER VERSION 0.0.20"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -48,7 +48,8 @@ function CreateFolder($Path) {
   }
   Start-Sleep 1
   Write-Host " "
-  New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue -InformationAction SilentlyContinue
+  Write-Host "Создаю папку в ""$Path""..."
+  $null = New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue -InformationAction SilentlyContinue
   Write-Host " "
 }
 
@@ -62,7 +63,7 @@ catch {
 
 # DLL
 try {
-  Write-Host "Downloading data..."
+  Write-Host "Скачиваю дату..."
   DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.zip" "Data.zip"
 }
 catch {
@@ -71,6 +72,7 @@ catch {
 
 # Launcher
 try {
+  Write-Host "Скачиваю лаунчер..."
   CreateFolder "$ROOT\MCLauncher"
   DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" "$ROOT\MCLauncher"
 }
@@ -78,18 +80,18 @@ catch {
   Notify "Error while downloading MCLauncher" $_
 }
 
-# Setup.ps1
+# Script.ps1
 try {
-  Write-Host "Downloading next step script..."
+  Write-Host "Скачиваю скрипт для следующего шага..."
   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Script.ps1" -OutFile "$ROOT\Script.ps1"
 }
 catch {
   Notify "Error while downloading Setup.ps1" $_
 }
 
-# Next.txt
+# Следующий шаг.txt
 try {
-  Write-Host "Writing help text..."
+  Write-Host "Пишу текст справки..."
 
   $content = @"
 Нажмите по файлу SETUP.bat лкм и выберите "Запуск от имени администратора"
@@ -107,7 +109,7 @@ catch {
   Notify "Error while writing Next.txt" $_
 }
 
-Write-Host "Done. Check message boxes under another windows."
+Write-Host "Готово. Проверьте окна с сообщениями под другими программами."
 $message = @"
 Готово! Теперь нажмите пкм по файлу "Рабочий стол/Minecraft Bedrock Install/SETUP.bat" и выберите "Запуск от имени администратора"
 "@

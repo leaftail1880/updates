@@ -1,4 +1,4 @@
-﻿Write-Host "SETUP VERSION 0.0.18"
+﻿Write-Host "SETUP VERSION 0.0.20"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -49,7 +49,7 @@ function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
   $DLLtoPatch = "$DLLtoPatchFolder\$DLLtoPatchName"
 
   try {
-    Write-Host "Patching DLL at $DLLtoPatch"
+    Write-Host "DLL: $DLLtoPatch"
     takeown /f "$DLLtoPatch"
     icacls "$DLLtoPatch" /grant *S-1-3-4:F /c
 
@@ -61,14 +61,17 @@ function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
 }
 
 try {
-  Write-Host "Patching DLL's..."
+  Write-Host " "
+  Write-Host "Заменяю DLL's..."
+  Write-Host " "
 
   $DLL = "Windows.ApplicationModel.Store.dll"
 
   $PROCESS = Get-Process -Name WinStore.App -ErrorAction SilentlyContinue
   if ($PROCESS) {
     try {
-      Write-Host "Stopping WinStore.App process..."
+      Write-Host "Останавливаю WinStore.App..."
+      Write-Host " "
       $PROCESS.Kill()
       Start-Sleep 4
     } 
@@ -79,27 +82,34 @@ try {
 
   PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT\Data\System32\$DLL"
   PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT\Data\SysWOW64\$DLL"
+  Write-Host " "
+
 }
 catch {
   Notify "DLL patch failed" $_
 }
 
 try {
-  Write-Host "Installing Launcher..."
+  Write-Host " "
+  Write-Host "Устанавливаю лаунчер..."
+  Write-Host " "
+
   $LauncherFolder = "$env:ProgramFiles\MCLauncher"
 
   if (Test-Path -Path $LauncherFolder -PathType Container -ErrorAction SilentlyContinue) {
     Remove-Item $LauncherFolder -ErrorAction Stop -Force -Recurse
   }
   
-  Write-Host "Moving files to $env:ProgramFiles\MCLauncher..."
+  Write-Host "Перемещаю файлы в $env:ProgramFiles\MCLauncher..."
+  Write-Host " "
   Move-Item "$ROOT\MCLauncher" $LauncherFolder -Force
   Move-Item "$ROOT\Data\icon.ico" $LauncherFolder -Force
 
   $ShortcutPath = "$LauncherFolder\Minecraft Bedrock Launcher.lnk"
   
   # Создать объект ярлыка
-  Write-Host "Creating Shortcut..."
+  Write-Host "Настраиваю ярлыки..."
+  Write-Host " "
   $WshShell = New-Object -ComObject WScript.Shell
   $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
   
@@ -113,7 +123,8 @@ try {
   # Сохранить ярлык
   $Shortcut.Save()
 
-  Write-Host "Copying shortcuts..."
+  Write-Host "Копирую ярлыки..."
+  Write-Host " "
   Copy-Item -Path $ShortcutPath -Destination "$DESKTOP" -Force -ErrorAction SilentlyContinue
   Copy-Item -Path $ShortcutPath -Destination "$env:ProgramData\Microsoft\Windows\Start Menu\Programs" -Force -ErrorAction SilentlyContinue
 }
@@ -123,13 +134,16 @@ catch {
 
 try {
   Start-Sleep 3
-  Write-Host "Removing folder..."
+  Write-Host "Убираю установочные файлы..."
+  Write-Host " "
   Remove-Item $ROOT -Recurse -Force
 }
 catch {
   Notify "Removing setup folder failed!" $_
 }
 
-Write-Host "Minecraft Bedrock Installed Successfully! Now open MCLauncher located on Desktop and install any version!"
-[System.Windows.MessageBox]::Show("Minecraft Bedrock установлен! Теперь установите сам Minecraft используя ярлык лаунчера на рабочем столе или в стартовом меню.")
-Exit
+$message = "Minecraft Bedrock установлен! Теперь установите сам Minecraft используя ярлык лаунчера на рабочем столе или в стартовом меню."
+
+Write-Host $message
+[System.Windows.MessageBox]::Show($message)
+Exit 0
