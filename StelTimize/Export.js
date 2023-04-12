@@ -7,7 +7,7 @@ import "jsonminify";
 import { fordir } from "leafy-utils";
 
 const mojang =
-	"../../../AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang";
+	"../../../AppData/Local/Packages/Microsoft.MinecraftWindowsBeta_8wekyb3d8bbwe/LocalState/games/com.mojang";
 const folder = "Steltimize";
 const pathTo = "./temp";
 
