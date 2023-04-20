@@ -98,7 +98,8 @@ try {
   Write-Host " "
 
   $content2 = @"
-powershell.exe -ExecutionPolicy Bypass -File ".\Data\Script.ps1" -Encoding utf8bom
+powershell.exe -ExecutionPolicy Bypass -File "%USERPROFILE%\Downloads\Packet\Data\Script.ps1" -Encoding utf8bom
+PAUSE
 "@
   Set-Content -Path "$ROOT\SETUP.bat" -Value $content2
 }
