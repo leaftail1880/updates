@@ -1,8 +1,9 @@
-﻿Write-Host "INSTALLER VERSION 0.0.22"
+﻿Write-Host "INSTALLER VERSION 0.0.23"
 
 Add-Type -AssemblyName PresentationFramework
 
-$ROOT = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))\Minecraft Bedrock Install"
+$FILES = ".\MC"
+$ROOT = "$FILES\InstallerData"
 
 function DownloadArchieve($Uri, $FileName, $Folder = $ROOT) {
   $file = "$Folder\$FileName"
@@ -47,7 +48,7 @@ function CreateFolder($Path) {
     Remove-Item $Path -ErrorAction Stop -Force -Recurse
   }
   Start-Sleep 1
-  Write-Host "Создаю папку в ""$Path""..."
+  Write-Host "Creating folder on path ""$Path""..."
   $null = New-item $Path -ItemType Directory -Force -ErrorAction SilentlyContinue -InformationAction SilentlyContinue
   Write-Host " "
 }
@@ -57,25 +58,25 @@ try {
   CreateFolder $ROOT
 }
 catch {
-  Notify "Error while creating folder on desktop" $_
+  Notify "Error while creating folder" $_
 }
 
 # DLL
 try {
-  Write-Host "Скачиваю дату..."
+  Write-Host "Expanding data..."
   Write-Host " "
-  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.zip" "Data.zip"
+  Expand-Archive -Path "$FILES\Data.zip" -DestinationPath $ROOT -Force
 }
 catch {
-  Notify "Error while downloading DLL's." $_
+  Notify "Error while expanding data" $_
 }
 
 # Launcher
 try {
-  Write-Host "Скачиваю лаунчер..."
+  Write-Host "Downloading launcher..."
   Write-Host " "
-  CreateFolder "$ROOT\MCLauncher"
-  DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" "$ROOT\MCLauncher"
+  CreateFolder "$ROOT\Data\MCLauncher"
+  DownloadArchieve "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" "$ROOT\Data\MCLauncher"
 }
 catch {
   Notify "Error while downloading MCLauncher" $_
@@ -83,38 +84,35 @@ catch {
 
 # Script.ps1
 try {
-  Write-Host "Скачиваю скрипт для следующего шага..."
+  Write-Host "Copying Setup.ps1..."
   Write-Host " "
-  Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Script.ps1" -OutFile "$ROOT\Script.ps1"
+  Copy-Item ".\MC\Script.ps1" -Destination ".\MC\InstallerData\Data"
 }
 catch {
-  Notify "Error while downloading Setup.ps1" $_
+  Notify "Error while copying Setup.ps1" $_
 }
 
 # Следующий шаг.txt
 try {
-  Write-Host "Пишу текст справки..."
+  Write-Host "Writing SETUP.bat..."
   Write-Host " "
 
-  $content = @"
-Нажмите по файлу SETUP.bat лкм и выберите "Запуск от имени администратора"
-"@
-  Set-Content -Path "$ROOT\Следующий шаг.txt" -Value $content
-
-
-
   $content2 = @"
-powershell.exe -ExecutionPolicy Bypass -File "$ROOT\Script.ps1" -Encoding utf8bom
+powershell.exe -ExecutionPolicy Bypass -File ".\Data\Script.ps1" -Encoding utf8bom
 "@
   Set-Content -Path "$ROOT\SETUP.bat" -Value $content2
 }
 catch {
-  Notify "Error while writing Next.txt" $_
+  Notify "Error while writing setup.bat" $_
 }
 
-Write-Host "Готово. Проверьте окна с сообщениями под другими программами."
-$message = @"
-Готово! Теперь нажмите пкм по файлу "Рабочий стол/Minecraft Bedrock Install/SETUP.bat" и выберите "Запуск от имени администратора"
-"@
-[System.Windows.MessageBox]::Show($message)
+try {
+  Compress-Archive -Path "$ROOT\*" -DestinationPath "$FILES\Packet.zip" -Force
+  Remove-Item -Path "$ROOT" -Force -Recurse
+}
+catch {
+  Notify "Packing failed" $_
+}
+
+Write-Host "Done."
 Exit 0

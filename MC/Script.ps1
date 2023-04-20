@@ -1,4 +1,4 @@
-﻿Write-Host "SETUP VERSION 0.0.22"
+﻿Write-Host "SETUP VERSION 0.0.23"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -11,10 +11,9 @@ if (-NOT $IS_ADMIN) {
 }
 
 $DESKTOP = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))"
-$ROOT = "$DESKTOP\Minecraft Bedrock Install"
+$ROOT = ".\Data"
 
-Remove-Item "$ROOT\Error.txt" -Force -ErrorAction SilentlyContinue
-Remove-Item "$ROOT\SetupError.txt" -Force -ErrorAction SilentlyContinue
+Remove-Item ".\SetupError.txt" -Force -ErrorAction SilentlyContinue
 
 function Notify($Info, $Err) {
   # Determine system architecture
@@ -39,10 +38,10 @@ $Err
 "@
 
   # Write file
-  Set-Content -Path "$ROOT\SetupError.txt" -Value $logContent
+  Set-Content -Path ".\SetupError.txt" -Value $logContent
   # Show error
   Write-Error "$Info. Check error boxes under another windows."
-  [System.Windows.MessageBox]::Show("$Info. Check Desktop\Minecraft Bedrock Install\SetupError.txt for detail.")
+  [System.Windows.MessageBox]::Show("$Info. Check SetupError.txt for detail.")
   Exit 1
 }
 
