@@ -1,4 +1,4 @@
-﻿Write-Host "SETUP VERSION 0.0.24"
+﻿Write-Host "SETUP VERSION 0.0.25"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -11,7 +11,7 @@ if (-NOT $IS_ADMIN) {
 }
 
 $DESKTOP = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))"
-$ROOT = ".\Data"
+$ROOT = "$env:USERPROFILE\Downloads\Packet"
 
 Remove-Item ".\SetupError.txt" -Force -ErrorAction SilentlyContinue
 
@@ -40,7 +40,7 @@ $Err
   # Write file
   Set-Content -Path ".\SetupError.txt" -Value $logContent
   # Show error
-  Write-Error "$Info. Check error boxes under another windows."
+  Write-Error "$Info. Check error boxes under another windows. $logContent"
   [System.Windows.MessageBox]::Show("$Info. Check SetupError.txt for detail.")
   Exit 1
 }
@@ -52,11 +52,13 @@ function PatchDLL($DLLtoPatchFolder, $DLLtoPatchName, $newDLL) {
   try {
     Write-Host " "
     Write-Host "DLL: $DLLtoPatch"
+
     Write-Host " "
     takeown /f "$DLLtoPatch"
     icacls "$DLLtoPatch" /grant *S-1-3-4:F /c
     Write-Host " "
 
+    Write-Host "$newDLL $DLLtoPatchFolder"
     Copy-Item -Path $newDLL -Destination $DLLtoPatchFolder -Force -ErrorAction Stop
   }
   catch {
@@ -84,6 +86,7 @@ try {
     }
   }
 
+  Write-Host $ROOT
   PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT\System32\$DLL"
   PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT\SysWOW64\$DLL"
   Write-Host " "

