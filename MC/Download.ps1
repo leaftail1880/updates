@@ -1,4 +1,4 @@
-﻿Write-Host "INSTALLER VERSION 0.0.23"
+﻿Write-Host "INSTALLER VERSION 0.0.24"
 
 Add-Type -AssemblyName PresentationFramework
 
@@ -59,6 +59,13 @@ try {
 }
 catch {
   Notify "Error while creating folder" $_
+}
+
+try {
+  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.ps1" "Data.zip" $FILES
+}
+catch {
+  Notify "Error while downloading data" $_
 }
 
 # DLL
