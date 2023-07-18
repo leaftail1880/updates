@@ -62,7 +62,7 @@ catch {
 }
 
 try {
-  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.ps1" "Data.zip" $FILES
+  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.zip" "Data.zip" $FILES
 }
 catch {
   Notify "Error while downloading data" $_
