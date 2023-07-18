@@ -84,8 +84,8 @@ try {
     }
   }
 
-  PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT\Data\System32\$DLL"
-  PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT\Data\SysWOW64\$DLL"
+  PatchDLL "$env:SystemRoot\System32" $DLL "$ROOT\System32\$DLL"
+  PatchDLL "$env:SystemRoot\SysWOW64" $DLL "$ROOT\SysWOW64\$DLL"
   Write-Host " "
 
 }
@@ -107,7 +107,7 @@ try {
   Write-Host "Перемещаю файлы в $env:ProgramFiles\MCLauncher..."
   Write-Host " "
   Move-Item "$ROOT\MCLauncher" $LauncherFolder -Force
-  Move-Item "$ROOT\Data\icon.ico" $LauncherFolder -Force
+  Move-Item "$ROOT\icon.ico" $LauncherFolder -Force
 
   $ShortcutPath = "$LauncherFolder\Minecraft Bedrock Launcher.lnk"
   

@@ -2,8 +2,7 @@
 
 Add-Type -AssemblyName PresentationFramework
 
-$FILES = ".\MC"
-$ROOT = "$FILES\InstallerData"
+$ROOT = ".\NewPacket"
 
 function DownloadArchieve($Uri, $FileName, $Folder = $ROOT) {
   $file = "$Folder\$FileName"
@@ -53,6 +52,8 @@ function CreateFolder($Path) {
   Write-Host " "
 }
 
+Remove-Item $ROOT -Force -Recurse -ErrorAction Ignore
+
 # Folder
 try {
   CreateFolder $ROOT
@@ -62,20 +63,10 @@ catch {
 }
 
 try {
-  DownloadArchieve "https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Data.zip" "Data.zip" $FILES
+  Expand-Archive "./Data.zip" $ROOT
 }
 catch {
   Notify "Error while downloading data" $_
-}
-
-# DLL
-try {
-  Write-Host "Expanding data..."
-  Write-Host " "
-  Expand-Archive -Path "$FILES\Data.zip" -DestinationPath $ROOT -Force
-}
-catch {
-  Notify "Error while expanding data" $_
 }
 
 # Launcher
@@ -91,12 +82,12 @@ catch {
 
 # Script.ps1
 try {
-  Write-Host "Copying Setup.ps1..."
+  Write-Host "Copying Script.ps1..."
   Write-Host " "
-  Copy-Item ".\MC\Script.ps1" -Destination ".\MC\InstallerData\Data"
+  Copy-Item ".\Script.ps1" -Destination "$ROOT\Data"
 }
 catch {
-  Notify "Error while copying Setup.ps1" $_
+  Notify "Error while copying Script.ps1" $_
 }
 
 # Следующий шаг.txt
@@ -115,7 +106,7 @@ catch {
 }
 
 try {
-  Compress-Archive -Path "$ROOT\*" -DestinationPath "$FILES\Packet.zip" -Force
+  Compress-Archive -Path "$ROOT\*" -DestinationPath ".\Packet.zip" -Force
   Remove-Item -Path "$ROOT" -Force -Recurse
 }
 catch {
