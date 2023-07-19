@@ -11,7 +11,7 @@ if (-NOT $IS_ADMIN) {
 }
 
 $DESKTOP = "$([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::Desktop))"
-$ROOT = "$env:USERPROFILE\Downloads\Packet"
+$ROOT = "$env:USERPROFILE\Downloads\Packet\Data"
 
 Remove-Item ".\SetupError.txt" -Force -ErrorAction SilentlyContinue
 
