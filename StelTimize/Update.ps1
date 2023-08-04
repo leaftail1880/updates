@@ -27,7 +27,7 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/m
 Expand-Archive -Path "$packs\$packName.zip" -DestinationPath "$packs"
 Rename-Item "$packs\temp" -NewName $packName
 Remove-Item -Path "$packs\$packName.zip" -Force
-Copy-Item -Path "$packs\$packName" -Destination $packsBeta -Force
+Copy-Item -Path "$packs\$packName" -Destination $packsBeta -Force -Recurse
 
 $manifest = Get-Content "$packs\$packName\manifest.json" | ConvertFrom-Json
 $version = $manifest.header.version
@@ -38,10 +38,15 @@ function UpdateStealtimize($mojang) {
   Write-Host "Updating file '$globalRpFile'..."
   
   try {
-    $json = Get-Content $globalRpFile -ErrorAction SilentlyContinue | ConvertFrom-Json
+    $json = Get-Content -Raw $globalRpFile -ErrorAction SilentlyContinue 
+    $json = ConvertFrom-Json "{""array"":$json}"
+    $json = $json.array
   }
-  catch {
-    $json = "{}" | ConvertFrom-Json
+  catch {}
+  
+  if (!$json) {
+    $json = "{""array"":[]}" | ConvertFrom-Json
+    $json = $json.array
   }
   
   $found = $false
@@ -53,24 +58,22 @@ function UpdateStealtimize($mojang) {
   }
 
   if (!$found) {
-    $newObj = @{
+    $json += @{
       pack_id = $packID
       subpack = "default"
       version = $version
     }
-    $json += $newObj
   }
 
-  $raw_json = ConvertTo-Json $json -Depth 100
-  $raw_json | Set-Content $globalRpFile -Force
+  ConvertTo-Json $json | Set-Content $globalRpFile -Force
 
-  Write-Host "Done. Full JSON content:"
+  Write-Host "Done. New file content:"
   Write-Host " "
-  Write-Host $raw_json
+  Get-Content $globalRpFile | Write-Host
   Write-Host " "
-
-  # Read-Host -Prompt "Press Enter to exit"
 }
 
 UpdateStealtimize $mojang
 UpdateStealtimize $mojangBeta
+
+# Read-Host -Prompt "Press Enter to exit"
