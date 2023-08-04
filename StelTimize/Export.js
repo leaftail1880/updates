@@ -7,9 +7,11 @@ import "jsonminify";
 import { fordir } from "leafy-utils";
 
 const mojang =
-	"../../../AppData/Local/Packages/Microsoft.MinecraftWindowsBeta_8wekyb3d8bbwe/LocalState/games/com.mojang";
-const folder = "Steltimize";
+	"../../AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang";
+const folder = "StelTimize-DEV";
 const pathTo = "./temp";
+const packUUID = "12232017-1101-0000-a004-a1b2c3d4e5f6";
+const rpUUID = "12232017-1101-0001-a004-a1b2c3d4e5f6";
 
 /** @type {(buffer: Buffer) => {data: Buffer}} */
 function allowed(buffer) {
@@ -18,15 +20,22 @@ function allowed(buffer) {
 
 async function main() {
 	await fordir({
+		ignoreFolders: [".vscode", "$OLD"],
+		ignoreExtensions: [],
+		ignoreFiles: [],
 		inputPath: path.join(mojang, "development_resource_packs", folder),
 		outputPath: pathTo,
 		extensions: {
-			".json"(buffer, givenpath, filename) {
-				const basepath = path.parse(givenpath).base;
-				if (filename.startsWith("$") || [".vscode", "$OLD"].includes(basepath))
-					return { data: "{}", modified: false };
+			".json"(buffer, _, filename) {
+				if (filename.startsWith("$")) return { data: "{}", modified: false };
 
-				const newText = JSON.minify(Buffer.from(buffer).toString());
+				let newText = JSON.minify(Buffer.from(buffer).toString());
+				if (filename === "manifest.json") {
+					const manifest = JSON.parse(newText);
+					manifest.header.uuid = packUUID;
+					manifest.modules[0].uuid = rpUUID;
+					newText = JSON.stringify(manifest);
+				}
 				return { data: newText };
 			},
 			".png": allowed,
@@ -37,7 +46,7 @@ async function main() {
 	});
 
 	spawn(
-		`powershell.exe -Command "Compress-Archive -Path ${pathTo} -DestinationPath ./${folder}/packet.zip -Update; Remove-Item ${pathTo} -Recurse"`,
+		`powershell.exe -Command "Compress-Archive -Path ${pathTo} -DestinationPath ./StelTimize/packet.zip -Update; Remove-Item ${pathTo} -Recurse"`,
 		{ shell: true, stdio: "inherit" }
 	);
 }
