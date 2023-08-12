@@ -8,7 +8,6 @@ $packs = "$mojang\$devRP"
 $packsBeta = "$mojangBeta\$devRP"
 
 
-
 function EnsureDirs($mojang, $packs) {
   New-Item -ItemType Directory -Path $packs -Force
   New-Item -ItemType Directory -Path "$mojang\minecraftpe" -Force
@@ -25,7 +24,6 @@ EnsureDirs $mojangBeta $packsBeta
 
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/StealTimize/Packet.zip" -OutFile "$packs\$packName.zip"
 Expand-Archive -Path "$packs\$packName.zip" -DestinationPath "$packs"
-Rename-Item "$packs\temp" -NewName $packName
 Remove-Item -Path "$packs\$packName.zip" -Force
 Copy-Item -Path "$packs\$packName" -Destination $packsBeta -Force -Recurse
 

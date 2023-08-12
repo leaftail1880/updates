@@ -19,7 +19,7 @@ function allowed(buffer) {
 }
 
 async function main() {
-	Commiter.precommit = async (arg) => {
+	async function precommit(arg) {
 		await fordir({
 			ignoreFolders: ["$green"],
 			ignoreExtensions: [],
@@ -35,7 +35,7 @@ async function main() {
 						const manifest = JSON.parse(newText);
 						manifest.header.uuid = packUUID;
 						manifest.header.name = `"§l§f§o§k||§r §bSteal§dTimize ${manifest.header.version}§7§r"`;
-						manifest.header.version = arg.version;
+						manifest.header.version = arg.version ?? manifest.header.version;
 						manifest.modules[0].uuid = rpUUID;
 						newText = JSON.stringify(manifest);
 					}
@@ -49,12 +49,18 @@ async function main() {
 		});
 
 		spawnSync(
-			`powershell.exe -Command "Compress-Archive -Path ${pathTo} -DestinationPath ./StealTimize/Packet.zip -Update; Remove-Item ${pathTo} -Recurse"`,
+			`powershell.exe -Command "Compress-7Zip ${pathTo} -ArchiveFileName ./StealTimize/Packet.zip; Copy-Item ./StealTimize/Packet.zip ./StealTimize/StealTimize.mcpack; Remove-Item ${pathTo} -Recurse -Force"`,
 			{ shell: true, stdio: "inherit" }
 		);
-	};
+	}
 
-	await Commiter.add_commit_push(await Commiter.checkForCommitArgs());
+	if (process.argv[2] !== "test") {
+		Commiter.precommit = precommit;
+
+		await Commiter.add_commit_push(await Commiter.checkForCommitArgs());
+	} else {
+		precommit({});
+	}
 }
 
 main();

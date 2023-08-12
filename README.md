@@ -13,3 +13,9 @@ powershell.exe -nop -c "iex(New-Object Net.WebClient).DownloadString('https://ra
 ```
 
 https://raw.githubusercontent.com/leaftail1880/updates/main/MC/Packet.zip
+
+
+Dev
+```
+Install-Module 7Zip4PowerShell -Force -Verbose
+```
