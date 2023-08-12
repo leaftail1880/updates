@@ -34,7 +34,9 @@ async function main() {
 					if (filename === "manifest.json") {
 						const manifest = JSON.parse(newText);
 						manifest.header.uuid = packUUID;
-						manifest.header.name = `"§l§f§o§k||§r §bSteal§dTimize ${manifest.header.version}§7§r"`;
+						manifest.header.name = `§l§f§o§k||§r §bSteal§dTimize §7${manifest.header.version.join(
+							"."
+						)}§r`;
 						manifest.header.version = arg.version ?? manifest.header.version;
 						manifest.modules[0].uuid = rpUUID;
 						newText = JSON.stringify(manifest);
