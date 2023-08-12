@@ -23,7 +23,7 @@ function EnsureDirs($mojang, $packs) {
 EnsureDirs $mojang $packs
 EnsureDirs $mojangBeta $packsBeta
 
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/StelTimize/packet.zip" -OutFile "$packs\$packName.zip"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/StealTimize/Packet.zip" -OutFile "$packs\$packName.zip"
 Expand-Archive -Path "$packs\$packName.zip" -DestinationPath "$packs"
 Rename-Item "$packs\temp" -NewName $packName
 Remove-Item -Path "$packs\$packName.zip" -Force
@@ -50,18 +50,24 @@ function UpdateStealtimize($mojang) {
   }
   
   $found = $false
+  $found_dev = $false
   foreach ($obj in $json) {
     if ($obj.pack_id -eq $packID) {
       $obj.version = $version
       $found = $true
     }
+    if ($obj.pack_id -eq "12232017-1101-0000-a004-a1b2c3d4e5f7") {
+      $found_dev = $true
+    }
   }
 
-  if (!$found) {
-    $json += @{
-      pack_id = $packID
-      subpack = "default"
-      version = $version
+  if (!$found_dev) {
+    if (!$found) {
+      $json += @{
+        pack_id = $packID
+        subpack = "default"
+        version = $version
+      }
     }
   }
 
