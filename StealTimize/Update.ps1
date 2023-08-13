@@ -1,3 +1,5 @@
+Write-Host "INSTALLER VERSION 1.0.0"
+
 $packName = 'StealTimize'
 
 $mojang = "$env:USERPROFILE\AppData\Local\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang"
@@ -23,7 +25,7 @@ EnsureDirs $mojang $packs
 EnsureDirs $mojangBeta $packsBeta
 
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/leaftail1880/updates/main/StealTimize/Packet.zip" -OutFile "$packs\$packName.zip"
-Expand-Archive -Path "$packs\$packName.zip" -DestinationPath "$packs"
+Expand-Archive -Path "$packs\$packName.zip" -DestinationPath "$packs\$packName"
 Remove-Item -Path "$packs\$packName.zip" -Force
 Copy-Item -Path "$packs\$packName" -Destination $packsBeta -Force -Recurse
 
@@ -80,4 +82,4 @@ function UpdateStealtimize($mojang) {
 UpdateStealtimize $mojang
 UpdateStealtimize $mojangBeta
 
-# Read-Host -Prompt "Press Enter to exit"
+Read-Host -Prompt "Press Enter to exit"
