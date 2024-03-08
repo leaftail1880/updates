@@ -50,9 +50,10 @@ async function main() {
 				".txt": true,
 				".tga": true,
 				".lang": true,
+				".fragment": true,
 				".jpg": false,
 			},
-			silentMode: false,
+			silentMode: true,
 		});
 
 		spawnSync(
