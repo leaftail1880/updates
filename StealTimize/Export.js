@@ -44,6 +44,7 @@ async function main() {
 				},
 				".png": allowed,
 				".txt": allowed,
+				".tga": allowed,
 				".lang": allowed,
 			},
 			silentMode: false,
