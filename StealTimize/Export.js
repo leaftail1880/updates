@@ -4,7 +4,7 @@ import { spawnSync } from "child_process";
 import path from "path";
 
 import "jsonminify";
-import { Commiter, fordir } from "leafy-utils";
+import { Committer, fordir } from "leafy-utils";
 
 const mojang =
 	"../../AppData/Local/Packages/Microsoft.MinecraftUWP_8wekyb3d8bbwe/LocalState/games/com.mojang";
@@ -22,7 +22,6 @@ async function main() {
 	async function precommit(arg) {
 		await fordir({
 			ignoreFolders: ["$green"],
-			ignoreExtensions: [],
 			ignoreFiles: [],
 			inputPath: path.join(mojang, "development_resource_packs", folder),
 			outputPath: pathTo,
@@ -57,9 +56,9 @@ async function main() {
 	}
 
 	if (process.argv[2] !== "test") {
-		Commiter.precommit = precommit;
+		Committer.precommit = precommit;
 
-		await Commiter.add_commit_push(await Commiter.checkForCommitArgs());
+		await Committer.commit();
 	} else {
 		precommit({});
 	}
