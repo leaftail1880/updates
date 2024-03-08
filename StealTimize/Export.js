@@ -13,12 +13,16 @@ const pathTo = "./temp";
 const packUUID = "12232017-1101-0000-a004-a1b2c3d4e5f6";
 const rpUUID = "12232017-1101-0001-a004-a1b2c3d4e5f6";
 
-/** @type {(buffer: Buffer) => {data: Buffer}} */
-function allowed(buffer) {
-	return { data: buffer };
-}
-
 async function main() {
+	if (process.argv[2] !== "test") {
+		Committer.precommit = precommit;
+
+		await Committer.commit(await Committer.parseArgs());
+	} else {
+		precommit({});
+	}
+
+	/** @param {Partial<import("leafy-utils").CommitHookArgument>} arg  */
 	async function precommit(arg) {
 		await fordir({
 			ignoreFolders: ["$green"],
@@ -42,10 +46,11 @@ async function main() {
 					}
 					return { data: newText };
 				},
-				".png": allowed,
-				".txt": allowed,
-				".tga": allowed,
-				".lang": allowed,
+				".png": true,
+				".txt": true,
+				".tga": true,
+				".lang": true,
+				".jpg": false,
 			},
 			silentMode: false,
 		});
@@ -54,14 +59,6 @@ async function main() {
 			`powershell.exe -Command "Compress-7Zip ${pathTo} -ArchiveFileName ./StealTimize/Packet.zip; Copy-Item ./StealTimize/Packet.zip ./StealTimize/StealTimize.mcpack; Remove-Item ${pathTo} -Recurse -Force"`,
 			{ shell: true, stdio: "inherit" }
 		);
-	}
-
-	if (process.argv[2] !== "test") {
-		Committer.precommit = precommit;
-
-		await Committer.commit();
-	} else {
-		precommit({});
 	}
 }
 
