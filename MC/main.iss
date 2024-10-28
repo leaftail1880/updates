@@ -1,5 +1,5 @@
 #define MyAppName "Minecraft Bedrock Launcher"
-#define MyAppVersion "0.0.3"
+#define MyAppVersion "0.0.4"
 #define MyAppExeName "MCLauncher.exe"
 #define MySetup "C:\Users\Настя\Documents\updates\MC\"
 
@@ -17,6 +17,7 @@ Compression=zip
 SolidCompression=yes
 WizardStyle=modern
 InfoAfterFile={#MySetup}\Packet\after.txt
+PrivilegesRequired=admin 
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
@@ -37,6 +38,7 @@ Name: "stealtimize"; Description: "{cm:StealtimizeDesc}"; GroupDescription: "{cm
 Source: "{#MySetup}\Packet\MCLauncher\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#MySetup}\Packet\icon.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MySetup}\Packet\setup.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MySetup}\Packet\uninstall.bat"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#MySetup}\Packet\System32\*"; DestDir: "{app}\temp\System32"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#MySetup}\Packet\SysWOW64\*"; DestDir: "{app}\temp\SysWOW64"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -65,6 +67,6 @@ begin
 end;
 
 [Run]
-Filename: "{app}\setup.bat"; Parameters: """{app}"" ""{win}"""; Flags: shellexec runascurrentuser; WorkingDir: "{app}"; StatusMsg: "Running setup.bat..."
+Filename: "{app}\setup.bat"; Flags: shellexec runascurrentuser; WorkingDir: "{app}"; StatusMsg: "Running setup.bat..."
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -nop -c iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/StealTimize/Update.ps1')"; Flags: shellexec runascurrentuser; Check: ShouldInstallSM;
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent shellexec
