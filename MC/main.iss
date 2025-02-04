@@ -1,7 +1,7 @@
 #define MyAppName "Minecraft Bedrock Launcher"
-#define MyAppVersion "0.0.4"
+#define MyAppVersion "0.0.5"
 #define MyAppExeName "MCLauncher.exe"
-#define MySetup "C:\Users\Настя\Documents\updates\MC\"
+#define MySetup ".\"
 
 [Setup]
 AppId={{C3239EC2-C90A-4842-B040-A6A5D7BD11BC}
