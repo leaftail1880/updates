@@ -27,8 +27,7 @@ Name: "ru"; MessagesFile: "compiler:Languages\Russian.isl"
 en.Stealtimize=Stealtimize:
 ru.Stealtimize=Stealtimize:
 en.StealtimizeDesc=&Install StealTimize resource pack
-ru.StealtimizeDesc=&Установить ресурс пак StealTimize (русский шрифт размером с английский, темная тема меню, имена зачарований как в Java и тд)
-
+ru.StealtimizeDesc=&РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЂРµСЃСѓСЂСЃ РїР°Рє StealTimize
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce
@@ -37,8 +36,8 @@ Name: "stealtimize"; Description: "{cm:StealtimizeDesc}"; GroupDescription: "{cm
 [Files]
 Source: "{#MySetup}\Packet\MCLauncher\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#MySetup}\Packet\icon.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MySetup}\Packet\setup.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#MySetup}\Packet\uninstall.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MySetup}\Packet\setup.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MySetup}\Packet\uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#MySetup}\Packet\System32\*"; DestDir: "{app}\temp\System32"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#MySetup}\Packet\SysWOW64\*"; DestDir: "{app}\temp\SysWOW64"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -67,6 +66,6 @@ begin
 end;
 
 [Run]
-Filename: "{app}\setup.bat"; Flags: shellexec runascurrentuser; WorkingDir: "{app}"; StatusMsg: "Running setup.bat..."
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -nop -c ""echo Installing...; powershell -File '{app}\setup.ps1'; pause"""; Flags: shellexec; WorkingDir: "{app}"; StatusMsg: "Running setup.ps1..."
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -nop -c iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/StealTimize/Update.ps1')"; Flags: shellexec runascurrentuser; Check: ShouldInstallSM;
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent shellexec

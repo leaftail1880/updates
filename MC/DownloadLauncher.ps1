@@ -15,4 +15,4 @@ New-item $ROOT -ItemType Directory -Force -ErrorAction Stop
 Write-Host " "
 Write-Host "Downloading launcher..."
 Write-Host " "
-DownloadArchive "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.4.0/MCLauncher.zip" "MCLauncher.zip" $ROOT
+DownloadArchive "https://github.com/MCMrARM/mc-w10-version-launcher/releases/download/0.5.0/MCLauncher.zip" "MCLauncher.zip" $ROOT
