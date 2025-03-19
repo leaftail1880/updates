@@ -11,10 +11,8 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 }
 
 function info() { 
-  echo "System: $($(Get-ChildItem C:\Windows\System32\Windows.ApplicationModel.Store.dll).Length / 1024) Must be: $($(Get-ChildItem 'C:/Program Files/MCLauncher2/temp/System32/Windows.ApplicationModel.Store.dll').Length / 1024)"
+  echo "System: $($(Get-ChildItem C:\Windows\System32\Windows.ApplicationModel.Store.dll).Length / 1024) Must be: $($(Get-ChildItem '$PSScriptRoot\temp\System32\Windows.ApplicationModel.Store.dll').Length / 1024)"
 }
-
-info
 
 mkdir -Force "$PSScriptRoot\original" >> $null
 mkdir -Force "$PSScriptRoot\original\System32" >> $null
@@ -23,6 +21,18 @@ mkdir -Force "$PSScriptRoot\original\SysWOW64" >> $null
 taskkill /f /im WinStore.App.exe
 taskkill /f /im Minecraft.Windows.exe
 timeout 1
+
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
+info
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
 
 takeown /f "C:\Windows\System32\Windows.ApplicationModel.Store.dll"
 icacls "C:\Windows\System32\Windows.ApplicationModel.Store.dll" /grant *S-1-3-4:F /c
@@ -44,6 +54,20 @@ echo " "
 echo " "
 echo " "
 echo "if sizes match, install is successfull"
+echo " "
 info
+
+echo " "
+echo " "
+echo " "
+echo " "
+echo "Otherwise, use this command"
+echo " "
+echo "Copy-Item -Verbose -Force ""$PSScriptRoot\temp\System32\Windows.ApplicationModel.Store.dll"" ""C:\Windows\System32\"""
+echo " "
+echo " "
+echo " "
+echo " "
+echo " "
 
 pause

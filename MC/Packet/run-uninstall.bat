@@ -1,0 +1,1 @@
+powershell .\uninstall.ps1

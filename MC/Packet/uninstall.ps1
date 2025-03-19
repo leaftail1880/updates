@@ -11,7 +11,7 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 }
 
 function info() { 
-  echo "System: $($(Get-ChildItem C:\Windows\System32\Windows.ApplicationModel.Store.dll).Length / 1024) Must be: $($(Get-ChildItem 'C:/Program Files/MCLauncher2/temp/System32/Windows.ApplicationModel.Store.dll').Length / 1024)"
+  echo "System: $($(Get-ChildItem C:\Windows\System32\Windows.ApplicationModel.Store.dll).Length / 1024) Must be: $($(Get-ChildItem '$PSScriptRoot\temp\System32\Windows.ApplicationModel.Store.dll').Length / 1024)"
 }
 
 info

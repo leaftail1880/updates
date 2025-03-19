@@ -1,5 +1,5 @@
 #define MyAppName "Minecraft Bedrock Launcher"
-#define MyAppVersion "0.0.5"
+#define MyAppVersion "0.0.6"
 #define MyAppExeName "MCLauncher.exe"
 #define MySetup ".\"
 
@@ -38,6 +38,8 @@ Source: "{#MySetup}\Packet\MCLauncher\*"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MySetup}\Packet\icon.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MySetup}\Packet\setup.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MySetup}\Packet\uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MySetup}\Packet\run-setup.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MySetup}\Packet\run-uninstall.bat"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#MySetup}\Packet\System32\*"; DestDir: "{app}\temp\System32"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#MySetup}\Packet\SysWOW64\*"; DestDir: "{app}\temp\SysWOW64"; Flags: ignoreversion recursesubdirs createallsubdirs
