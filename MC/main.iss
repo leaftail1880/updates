@@ -1,5 +1,5 @@
 #define MyAppName "Minecraft Bedrock Launcher"
-#define MyAppVersion "0.0.7"
+#define MyAppVersion "0.0.8"
 #define MyAppExeName "MCLauncher.exe"
 #define MySetup ".\"
 

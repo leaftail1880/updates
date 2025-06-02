@@ -23,7 +23,7 @@ echo " "
 echo " "
 echo "Before patch"
 echo " "
-$mustBe = $(Get-ChildItem "$PSScriptRoot\System32\Windows.ApplicationModel.Store.dll").Length / 1024
+$mustBe = $(Get-ChildItem "$PSScriptRoot\temp\System32\Windows.ApplicationModel.Store.dll").Length / 1024
 echo "Actual: $($(Get-ChildItem C:\Windows\System32\Windows.ApplicationModel.Store.dll).Length / 1024) Must be: $($mustBe)"
 echo " "
 echo " "
@@ -37,7 +37,7 @@ icacls "C:\Windows\System32\Windows.ApplicationModel.Store.dll" /grant *S-1-3-4:
 Copy-Item "C:\Windows\System32\Windows.ApplicationModel.Store.dll" "$PSScriptRoot\original\System32\"
 Copy-Item -Verbose -Force "$PSScriptRoot\temp\System32\Windows.ApplicationModel.Store.dll" "C:\Windows\System32\"
 
-$mustBe = $(Get-ChildItem "$PSScriptRoot\System32\Windows.ApplicationModel.Store.dll").Length / 1024
+$mustBe = $(Get-ChildItem "$PSScriptRoot\temp\System32\Windows.ApplicationModel.Store.dll").Length / 1024
 echo "Actual: $($(Get-ChildItem C:\Windows\System32\Windows.ApplicationModel.Store.dll).Length / 1024) Must be: $($mustBe)"
 
 # takeown /f "C:\Windows\SysWOW64\Windows.ApplicationModel.Store.dll"
