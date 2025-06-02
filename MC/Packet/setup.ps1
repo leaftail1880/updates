@@ -10,10 +10,6 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     exit;
 }
 
-function info() { 
-  echo "System: $($(Get-ChildItem C:\Windows\System32\Windows.ApplicationModel.Store.dll).Length / 1024) Must be: $($(Get-ChildItem '$PSScriptRoot\temp\System32\Windows.ApplicationModel.Store.dll').Length / 1024)"
-}
-
 mkdir -Force "$PSScriptRoot\original" >> $null
 mkdir -Force "$PSScriptRoot\original\System32" >> $null
 mkdir -Force "$PSScriptRoot\original\SysWOW64" >> $null
@@ -25,9 +21,10 @@ timeout 1
 echo " "
 echo " "
 echo " "
+echo "Before patch"
 echo " "
-echo " "
-info
+$mustBe = $(Get-ChildItem "$PSScriptRoot\System32\Windows.ApplicationModel.Store.dll").Length / 1024
+echo "Actual: $($(Get-ChildItem C:\Windows\System32\Windows.ApplicationModel.Store.dll).Length / 1024) Must be: $($mustBe)"
 echo " "
 echo " "
 echo " "
@@ -36,38 +33,23 @@ echo " "
 
 takeown /f "C:\Windows\System32\Windows.ApplicationModel.Store.dll"
 icacls "C:\Windows\System32\Windows.ApplicationModel.Store.dll" /grant *S-1-3-4:F /c
-timeout 1
 
 Copy-Item "C:\Windows\System32\Windows.ApplicationModel.Store.dll" "$PSScriptRoot\original\System32\"
 Copy-Item -Verbose -Force "$PSScriptRoot\temp\System32\Windows.ApplicationModel.Store.dll" "C:\Windows\System32\"
 
-takeown /f "C:\Windows\SysWOW64\Windows.ApplicationModel.Store.dll"
-icacls "C:\Windows\SysWOW64\Windows.ApplicationModel.Store.dll" /grant *S-1-3-4:F /c
-timeout 1
+$mustBe = $(Get-ChildItem "$PSScriptRoot\System32\Windows.ApplicationModel.Store.dll").Length / 1024
+echo "Actual: $($(Get-ChildItem C:\Windows\System32\Windows.ApplicationModel.Store.dll).Length / 1024) Must be: $($mustBe)"
 
-Copy-Item "C:\Windows\SysWOW64\Windows.ApplicationModel.Store.dll" "$PSScriptRoot\original\SysWOW64\"
-Copy-Item -Verbose -Force "$PSScriptRoot\temp\SysWOW64\Windows.ApplicationModel.Store.dll" "C:\Windows\SysWOW64\"
+# takeown /f "C:\Windows\SysWOW64\Windows.ApplicationModel.Store.dll"
+# icacls "C:\Windows\SysWOW64\Windows.ApplicationModel.Store.dll" /grant *S-1-3-4:F /c
+# timeout 1
 
-echo " "
-echo " "
-echo " "
-echo " "
-echo " "
-echo "if sizes match, install is successfull"
-echo " "
-info
+# Copy-Item "C:\Windows\SysWOW64\Windows.ApplicationModel.Store.dll" "$PSScriptRoot\original\SysWOW64\"
+# Copy-Item -Verbose -Force "$PSScriptRoot\temp\SysWOW64\Windows.ApplicationModel.Store.dll" "C:\Windows\SysWOW64\"
 
-echo " "
-echo " "
-echo " "
 echo " "
 echo "Otherwise, use this command"
 echo " "
 echo "Copy-Item -Verbose -Force ""$PSScriptRoot\temp\System32\Windows.ApplicationModel.Store.dll"" ""C:\Windows\System32\"""
 echo " "
 echo " "
-echo " "
-echo " "
-echo " "
-
-pause

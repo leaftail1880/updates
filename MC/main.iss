@@ -1,5 +1,5 @@
 #define MyAppName "Minecraft Bedrock Launcher"
-#define MyAppVersion "0.0.6"
+#define MyAppVersion "0.0.7"
 #define MyAppExeName "MCLauncher.exe"
 #define MySetup ".\"
 
@@ -68,6 +68,6 @@ begin
 end;
 
 [Run]
-Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -nop -c ""echo Installing...; powershell -File '{app}\setup.ps1'; pause"""; Flags: shellexec; WorkingDir: "{app}"; StatusMsg: "Running setup.ps1..."
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -nop -c ""echo Installing...; powershell -ExecutionPolicy Bypass -File '{app}\setup.ps1'; pause"""; Flags: shellexec runascurrentuser; WorkingDir: "{app}"; StatusMsg: "Running setup.ps1..."
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -nop -c iex(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/leaftail1880/updates/main/StealTimize/Update.ps1')"; Flags: shellexec runascurrentuser; Check: ShouldInstallSM;
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent shellexec
